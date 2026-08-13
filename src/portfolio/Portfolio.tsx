@@ -26,7 +26,7 @@ const visualCards = [
   {
     id: 'architecture', index: '02', eyebrow: 'SYSTEM ARCHITECTURE', title: '从用户入口到真实机器人执行',
     copy: '把小程序、AI 智能体、任务调度、机器人能力与运营后台组织为一条可观测、可干预的服务链路。',
-    type: 'architecture', caption: '小东鸭整体产品架构图（交互式重构）',
+    type: 'architecture', caption: '小东鸭整体产品架构图',
   },
   {
     id: 'journey', index: '03', eyebrow: 'USER JOURNEY', title: '用距离，而不是预约码，完成自然汇合',
@@ -164,7 +164,7 @@ export function Portfolio() {
           <section className={`case-section section ${i % 2 ? 'case-section--tint' : ''}`} id={card.id} key={card.id}>
             <SectionTitle index={card.index} eyebrow={card.eyebrow} title={card.title} copy={card.copy} />
             <button className="visual-frame" onClick={() => setVisual(card)} aria-label={`放大查看${card.caption}`}>
-              {card.type === 'architecture' ? <ProductVisual type={card.type} /> : <img className="portfolio-art" src={`${import.meta.env.BASE_URL}assets/portfolio/${card.type === 'journey' ? 'journey.png' : card.type === 'tech' ? 'tech-chain.png' : 'geofence-safety.png'}`} alt={card.caption}/>} 
+              <img className="portfolio-art" src={`${import.meta.env.BASE_URL}assets/portfolio/${card.type === 'architecture' ? 'architecture.png' : card.type === 'journey' ? 'journey.png' : card.type === 'tech' ? 'tech-chain.png' : 'geofence-safety.png'}`} alt={card.caption}/>
               <span className="visual-frame__caption"><b>{card.caption}</b><em>点击放大查看</em></span>
             </button>
             {card.type === 'journey' && <div className="rule-callout"><b>最新业务规则</b><span>持续获取机器人位置 + 用户位置</span><ArrowRightOutlined /><span>计算双方距离</span><ArrowRightOutlined /><strong>≤ 10m 自动汇合成功</strong><ArrowRightOutlined /><span>TTS 行李确认</span></div>}
@@ -209,7 +209,7 @@ export function Portfolio() {
         <div className="mobile-nav">{nav.map(([id, label]) => <button key={id} onClick={() => go(id)}>{label}<ArrowRightOutlined /></button>)}</div>
       </Drawer>
       <Modal open={!!visual} footer={null} onCancel={() => setVisual(null)} width={1100} centered title={visual?.caption}>
-        {visual && <div className="lightbox-content">{visual.type === 'architecture' ? <ProductVisual type={visual.type}/> : <img className="lightbox-image" src={`${import.meta.env.BASE_URL}assets/portfolio/${visual.type === 'journey' ? 'journey.png' : visual.type === 'tech' ? 'tech-chain.png' : visual.type === 'safety' ? 'geofence-safety.png' : 'my-role.png'}`} alt={visual.caption}/>}<p>{visual.copy}</p></div>}
+        {visual && <div className="lightbox-content"><img className="lightbox-image" src={`${import.meta.env.BASE_URL}assets/portfolio/${visual.type === 'architecture' ? 'architecture.png' : visual.type === 'journey' ? 'journey.png' : visual.type === 'tech' ? 'tech-chain.png' : visual.type === 'safety' ? 'geofence-safety.png' : 'my-role.png'}`} alt={visual.caption}/><p>{visual.copy}</p></div>}
       </Modal>
     </div>
   )

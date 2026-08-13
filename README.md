@@ -24,7 +24,7 @@ npm run build
 
 ## 在线 Demo
 
-计划发布到：<https://molly-gith.github.io/xiaodongya-portfolio/>
+<https://molly-gith.github.io/xiaodongya-portfolio/>
 
 > This portfolio contains sanitized and reconstructed product materials.
 >
@@ -32,4 +32,4 @@ npm run build
 
 ## 开发进度
 
-当前为三轮交付中的第 2/3 轮：互动后台、任务状态机、安全演示与作品集图片已接入。GitHub 仓库、Pages 发布和最终在线验收将在第 3 轮完成。
+三轮开发已完成：作品集 Case Study、5 张产品设计图、互动后台、任务状态机、安全演示、部署配置与公开访问入口均已整合到同一个 Web App。
