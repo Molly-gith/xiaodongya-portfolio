@@ -1,0 +1,16 @@
+import { Button, Card, Descriptions, Drawer, Modal, Space, Table, Tag, message } from 'antd'
+import { ExclamationCircleOutlined, EyeOutlined } from '@ant-design/icons'
+import { useState } from 'react'
+import { useDemo } from '../../store/DemoStore'
+import type { Alarm } from '../../types/demo'
+import { AlarmStatusTag } from '../components/StatusTag'
+
+export function Alarms(){
+  const demo=useDemo();const [selected,setSelected]=useState<Alarm|null>(null)
+  const active=demo.alarms.filter(a=>a.state==='ACTIVE').length,lock=demo.alarms.filter(a=>a.type==='LOCK').length
+  return <div className="demo-page"><div className="page-heading"><div><h1>告警中心</h1><p>系统驱动的安全事件生命周期与通知结果</p></div><Space><Button onClick={()=>demo.triggerAlarm('DWELL')}>触发 DWELL</Button><Button danger icon={<ExclamationCircleOutlined/>} onClick={()=>demo.triggerAlarm('LOCK')}>触发 LOCK</Button></Space></div>
+    <div className="alarm-stats"><Card><span>今日告警</span><strong>{demo.alarms.length}</strong></Card><Card className={active?'pulse-card':''}><span>进行中 ACTIVE</span><strong>{active}</strong></Card><Card><span>已恢复</span><strong>{demo.alarms.filter(a=>a.state==='RESOLVED').length}</strong></Card><Card className="lock-stat"><span>LOCK 安全事件</span><strong>{lock}</strong></Card><Card><span>短信送达率</span><strong>100%</strong></Card></div>
+    <Table className="data-card" rowKey="id" dataSource={demo.alarms} rowClassName={r=>r.type==='LOCK'?'lock-row':r.state==='IGNORED'?'ignored-row':''} columns={[{title:'触发时间',dataIndex:'time'},{title:'围栏',dataIndex:'fence'},{title:'机器人',dataIndex:'robot'},{title:'事件类型',dataIndex:'type',render:v=><Tag color={v==='LOCK'?'#8f101d':v==='DWELL'?'orange':'red'}>{v}</Tag>},{title:'状态',dataIndex:'state',render:s=><AlarmStatusTag state={s}/>},{title:'短信状态',dataIndex:'sms',render:v=><Tag color="success">{v}</Tag>},{title:'接收人',dataIndex:'recipient'},{title:'操作',render:(_,r)=><Space><Button type="link" icon={<EyeOutlined/>} onClick={()=>setSelected(r)}>详情</Button>{r.state!=='IGNORED'&&<Button type="link" onClick={()=>Modal.confirm({title:'确定标记为误报？',onOk:()=>demo.ignoreAlarm(r.id)})}>标记误报</Button>}</Space>}]}/>
+    <Drawer width={520} title={`告警详情 · ${selected?.id||''}`} open={!!selected} onClose={()=>setSelected(null)}>{selected&&<><div className={`alarm-state-banner alarm-state-banner--${selected.state.toLowerCase()}`}><AlarmStatusTag state={selected.state}/><p>{selected.state==='ACTIVE'?'机器人仍在风险状态；离开围栏后系统自动恢复。':'事件生命周期已更新并保留完整记录。'}</p></div><Descriptions column={1} items={[{key:'1',label:'围栏',children:selected.fence},{key:'2',label:'机器人',children:selected.robot},{key:'3',label:'触发条件',children:selected.type},{key:'4',label:'触发时间',children:selected.time}]}/><h3>短信发送结果</h3><div className="sms-result"><b>现场负责人</b><Tag color="success">SENT · 已送达</Tag><small>手机号已脱敏</small></div><div className="sms-result"><b>运营值班组</b><Tag color="success">SENT · 已送达</Tag><small>手机号已脱敏</small></div><h3>短信内容</h3><pre className="sms-copy">「小东鸭安全预警」杭州东站 · {selected.fence}：{selected.robot} 于 {selected.time} 触发 {selected.type}，请立即关注。</pre><Space><Button type="primary" onClick={()=>message.success('短信已重新发送（Mock）')}>重新发送短信</Button>{selected.state==='ACTIVE'&&<Button onClick={()=>demo.resolveAlarm(selected.id)}>模拟机器人离开</Button>}</Space></>}</Drawer>
+  </div>
+}
