@@ -9,3 +9,4 @@ dist
 *.tsbuildinfo
 .tmp-gh/
 .tmp-gh.zip
+.tmp-gh-auth-*.txt
