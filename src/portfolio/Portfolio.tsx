@@ -1,216 +1,159 @@
-import { useEffect, useState } from 'react'
-import { Button, Drawer, Modal, Tag } from 'antd'
-import {
-  ArrowRightOutlined,
-  CheckCircleFilled,
-  CompassOutlined,
-  MenuOutlined,
-  PlayCircleOutlined,
-  SafetyCertificateOutlined,
-} from '@ant-design/icons'
-import { useNavigate } from 'react-router-dom'
-import { Logo } from '../components/Logo'
-import { SectionTitle } from '../components/SectionTitle'
+import { useEffect, type ReactNode } from 'react'
+import { Image } from 'antd'
+import { ArrowLeftOutlined, ArrowRightOutlined, RobotOutlined } from '@ant-design/icons'
+import { Link, useLocation } from 'react-router-dom'
+import './hangxiaodong-editorial.css'
+import './xiaodongya-editorial.css'
 
-const nav = [
-  ['overview', '项目概览'],
-  ['architecture', '产品架构'],
-  ['journey', '用户 Journey'],
-  ['technology', '技术链路'],
-  ['safety', '安全机制'],
-  ['role', '我的工作'],
-  ['reflection', '项目复盘'],
+const asset = (folder: string, name: string) => `${import.meta.env.BASE_URL}assets/${folder}/${name}`
+const dailyReport = 'https://hznews.hangzhou.com.cn/chengshi/content/2026-04/30/content_9214811.htm'
+const toutiaoReport = 'https://www.toutiao.com/article/7652359359606948378/'
+const chapters = [
+  ['overview', '项目背景'], ['architecture', '产品架构'], ['journey', '一键传唤'],
+  ['technology', '语音与执行'], ['safety', '安全机制'], ['role', '我的工作'], ['coverage', '上线与报道'], ['reflection', '我学到的'],
 ]
 
-const visualCards = [
-  {
-    id: 'architecture', index: '02', eyebrow: 'SYSTEM ARCHITECTURE', title: '从用户入口到真实机器人执行',
-    copy: '把小程序、AI 智能体、任务调度、机器人能力与运营后台组织为一条可观测、可干预的服务链路。',
-    type: 'architecture', caption: '小东鸭整体产品架构图',
-  },
-  {
-    id: 'journey', index: '03', eyebrow: 'USER JOURNEY', title: '用距离，而不是预约码，完成自然汇合',
-    copy: '机器人与用户持续上报位置；双方距离 ≤ 10 米时自动判定汇合成功，并通过 TTS 发起行李确认。',
-    type: 'journey', caption: '一键传唤用户 Journey / 状态流转图',
-  },
-  {
-    id: 'technology', index: '04', eyebrow: 'AI × ROBOTICS', title: '理解、决策、执行与反馈形成闭环',
-    copy: 'AI 负责理解与对话，空间定位和机器人控制负责把意图转换为真实世界中的移动与服务。',
-    type: 'tech', caption: 'AI + 机器人技术链路图',
-  },
-  {
-    id: 'safety', index: '05', eyebrow: 'SAFETY BY DESIGN', title: '把空间风险前置为产品规则',
-    copy: 'ENTER 与 DWELL 覆盖区域风险；POINT 豁免停留告警；LOCK 独立于围栏，拥有全局最高优先级。',
-    type: 'safety', caption: '电子围栏安全机制图',
-  },
-]
+function Section({ id, title, children }: { id: string; title: string; children: ReactNode }) {
+  return <section id={id} tabIndex={-1} className="hh-section"><h2>{title}</h2>{children}</section>
+}
 
-function ProductVisual({ type }: { type: string }) {
-  if (type === 'architecture') return (
-    <div className="product-visual architecture-visual">
-      <div className="arch-node arch-node--source">杭小东小程序<br/><small>用户服务入口</small></div>
-      <span className="flow-arrow">→</span>
-      <div className="arch-node arch-node--ai">AI Agent<br/><small>意图理解 · 多轮对话</small></div>
-      <span className="flow-arrow">→</span>
-      <div className="arch-node arch-node--core">任务中枢<br/><small>校验 · 分配 · 状态机</small></div>
-      <span className="flow-arrow">→</span>
-      <div className="arch-node arch-node--robot">小东鸭机器人<br/><small>定位 · 导航 · TTS</small></div>
-      <div className="arch-platform">运营管理平台 <span>监控</span><span>调度</span><span>素材</span><span>安全</span><span>告警</span></div>
-    </div>
-  )
-  if (type === 'journey') return (
-    <div className="product-visual journey-visual">
-      {['发起传唤', '前往汇合点', '等待用户', '距离 ≤ 10m', '行李确认', '导航服务'].map((item, i) => (
-        <div className={`journey-step ${i === 3 ? 'journey-step--active' : ''}`} key={item}>
-          <span>{i + 1}</span><b>{item}</b>{i < 5 && <i />}
-        </div>
-      ))}
-      <div className="distance-readout"><span>双方距离</span><b>25m</b><em>→</em><b>18m</b><em>→</em><b>12m</b><em>→</em><strong>8m</strong></div>
-    </div>
-  )
-  if (type === 'tech') return (
-    <div className="product-visual tech-visual">
-      {[
-        ['01', '语音交互', '唤醒 · ASR · TTS'], ['02', '智能决策', '意图 · 补全 · 兜底'],
-        ['03', '空间感知', '定位 · 距离 · 围栏'], ['04', '机器人执行', '导航 · 暂停 · 完成'],
-      ].map(([num, title, text]) => <div className="tech-cell" key={num}><span>{num}</span><b>{title}</b><small>{text}</small></div>)}
-      <div className="tech-loop">实时状态回流</div>
-    </div>
-  )
-  return (
-    <div className="product-visual safety-visual">
-      <div className="map-grid" />
-      <div className="fence fence--low">LOW</div>
-      <div className="fence fence--high">HIGH</div>
-      <div className="safety-robot">鸭 <span>LOCK 全局事件</span></div>
-      <div className="safety-rules"><b>ENTER</b><span>进入立即触发</span><b>DWELL</b><span>超时触发 · POINT 豁免</span></div>
-    </div>
-  )
+function Diagram({ file, title }: { file: string; title: string }) {
+  return <figure className="xd-diagram">
+    <Image src={asset('portfolio', file)} alt={title} width="100%" loading="lazy" preview={{ mask: '放大查看' }} />
+    <figcaption><span>{title}</span><span>点击查看完整图</span></figcaption>
+  </figure>
 }
 
 export function Portfolio() {
-  const navigate = useNavigate()
-  const [menuOpen, setMenuOpen] = useState(false)
-  const [visual, setVisual] = useState<(typeof visualCards)[number] | null>(null)
-  const [scrolled, setScrolled] = useState(false)
-
+  const location = useLocation()
   useEffect(() => {
-    const onScroll = () => setScrolled(window.scrollY > 20)
-    window.addEventListener('scroll', onScroll)
-    return () => window.removeEventListener('scroll', onScroll)
+    const oldTitle = document.title
+    document.title = '小东鸭｜AI 产品经理作品集'
+    return () => { document.title = oldTitle }
   }, [])
+  useEffect(() => {
+    const frame = requestAnimationFrame(() => {
+      const id = location.hash.slice(1)
+      if (!id) { window.scrollTo({ top: 0, behavior: 'instant' }); return }
+      const target = document.getElementById(id)
+      target?.scrollIntoView({ behavior: 'instant' })
+      target?.focus({ preventScroll: true })
+    })
+    return () => cancelAnimationFrame(frame)
+  }, [location.hash, location.key])
 
-  const go = (id: string) => {
-    document.getElementById(id)?.scrollIntoView({ behavior: 'smooth' })
-    setMenuOpen(false)
-  }
-
-  return (
-    <div className="portfolio-shell">
-      <nav className={`site-nav ${scrolled ? 'site-nav--scrolled' : ''}`}>
-        <Logo />
-        <div className="site-nav__links">
-          {nav.map(([id, label]) => <button key={id} onClick={() => go(id)}>{label}</button>)}
+  return <div className="hh-page xd-page">
+    <Link className="hh-skip" to="/#overview">跳到案例正文</Link>
+    <header className="hh-header"><div className="hh-container">
+      <Link className="hh-brand" to="/">产品作品集</Link>
+      <nav aria-label="作品集导航"><Link to="/" aria-current="page">小东鸭</Link><Link to="/hangxiaodong">杭小东</Link><Link to="/demo/dashboard">管理后台演示</Link></nav>
+    </div></header>
+    <main>
+      <div className="hh-container hh-intro" id="home">
+        <Link className="hh-back" to="/hangxiaodong"><ArrowLeftOutlined /> 杭小东案例</Link>
+        <div className="hh-cover">
+          <div className="hh-cover-grid" />
+          <div className="hh-cover-brand"><span><RobotOutlined /></span><b>小东鸭</b></div>
+          <div className="hh-cover-shade" />
+          <div className="hh-cover-phones">
+            <img src={asset('xiaodongya', 'robot-onsite.png')} alt="杭州东站内的小东鸭机器人实拍" width="720" height="960" fetchPriority="high" />
+            <img src={asset('hangxiaodong', 'robot-map.png')} alt="小东鸭位置、可用状态与召唤界面" width="1206" height="2622" />
+          </div>
+          <span className="hh-cover-label">已上线 · 现场对话 · 一键传唤</span>
         </div>
-        <Button className="nav-demo" type="primary" onClick={() => navigate('/demo/dashboard')}>互动 Demo <ArrowRightOutlined /></Button>
-        <Button className="nav-menu" icon={<MenuOutlined />} onClick={() => setMenuOpen(true)} aria-label="打开菜单" />
-      </nav>
-
-      <header className="hero" id="home">
-        <div className="hero__orb hero__orb--one"/><div className="hero__orb hero__orb--two"/>
-        <div className="hero__content">
-          <div className="hero__badge"><span /> AI 产品经理 × 具身智能 × 机器人产品</div>
-          <h1><span>小东鸭</span><small>杭州东站具身智能服务机器人</small></h1>
-          <p>把“会回答问题”的 AI，<br/>延伸为“能在真实空间完成任务”的服务系统。</p>
-          <div className="hero__actions">
-            <Button type="primary" size="large" onClick={() => go('overview')}>查看完整 Case Study <ArrowRightOutlined /></Button>
-            <Button size="large" icon={<PlayCircleOutlined />} onClick={() => navigate('/demo/dashboard')}>进入互动 Demo</Button>
-          </div>
-          <div className="hero__proof">
-            <span><CheckCircleFilled /> 完整产品链路</span>
-            <span><CheckCircleFilled /> 可交互运营 Demo</span>
-            <span><CheckCircleFilled /> 全部数据已脱敏</span>
-          </div>
-        </div>
-        <div className="hero__stage" aria-label="机器人服务系统示意">
-          <div className="station-label">HANGZHOU EAST RAILWAY STATION <b>杭州东站</b></div>
-          <div className="stage-grid" />
-          <div className="route-line route-line--one"/><div className="route-line route-line--two"/>
-          <div className="duck-bot">
-            <div className="duck-bot__signal"><i/><i/><i/></div>
-            <div className="duck-bot__head"><span/><b/></div>
-            <div className="duck-bot__screen">服务中<small>路线引导</small></div>
-            <div className="duck-bot__body"/>
-          </div>
-          <div className="stage-card stage-card--status"><span className="live-dot"/> XIAODONGYA 01<strong>在线 · 服务中</strong></div>
-          <div className="stage-card stage-card--distance"><small>用户距离</small><strong>8.0 <i>m</i></strong><Tag color="blue">汇合成功</Tag></div>
-          <div className="stage-card stage-card--task"><CompassOutlined /><span>当前任务<b>前往地铁入口</b></span></div>
-        </div>
-      </header>
-
-      <main>
-        <section className="overview section" id="overview">
-          <SectionTitle index="01" eyebrow="PROJECT CONTEXT" title="当 AI 从屏幕走进真实空间" copy="在线智能体能够回答问题；但真实机器人要在拥挤、动态、不可预测的交通枢纽里，把一次对话变成一次可靠的服务。" />
-          <div className="problem-grid">
-            <div className="problem-lead"><span>核心挑战</span><h3>不是让机器人“更聪明”，<br/>而是让整个服务链路更可靠。</h3><p>大型交通枢纽中的机器人服务，同时受到用户、设备、网络和物理空间的约束。</p></div>
-            <div className="reality-grid">{['位置', '状态', '任务', '用户', '硬件', '网络', '空间', '安全', '异常'].map((x, i) => <div key={x}><span>0{i + 1}</span>{x}</div>)}</div>
-          </div>
-          <div className="project-facts">
-            <div><b>场景</b><span>大型交通枢纽</span></div><div><b>对象</b><span>旅客 · 机器人 · 运营人员</span></div><div><b>角色</b><span>AI 产品经理</span></div><div><b>交付</b><span>服务链路 + 运营安全系统</span></div>
-          </div>
+        <section className="hh-identity" aria-label="项目介绍">
+          <p className="hh-label">小东鸭 · AI 产品经理</p>
+          <h1>杭州东站具身智能服务机器人</h1>
+          <p className="hh-meta">2026 年 5 月 1 日上线 · 跨端服务设计 · 机器人联动</p>
+          <p className="hh-summary">在杭州东站，旅客可以直接与小东鸭对话，也可以通过杭小东小程序一键传唤，获得路线引导与行李辅助。我负责语音交互、传唤与导航流程、异常兜底和运营后台的产品设计。</p>
+          <ul className="hh-tags" aria-label="项目标签">{['AI 产品', '具身智能', '交通枢纽', '一键传唤', '已上线'].map(tag => <li key={tag}>{tag}</li>)}</ul>
+          <div className="hh-links"><Link to="/#experience">到站如何体验 <ArrowRightOutlined /></Link><a href={dailyReport} target="_blank" rel="noreferrer">阅读杭州日报报道 <ArrowRightOutlined /></a></div>
         </section>
+      </div>
 
-        {visualCards.map((card, i) => (
-          <section className={`case-section section ${i % 2 ? 'case-section--tint' : ''}`} id={card.id} key={card.id}>
-            <SectionTitle index={card.index} eyebrow={card.eyebrow} title={card.title} copy={card.copy} />
-            <button className="visual-frame" onClick={() => setVisual(card)} aria-label={`放大查看${card.caption}`}>
-              <img className="portfolio-art" src={`${import.meta.env.BASE_URL}assets/portfolio/${card.type === 'architecture' ? 'architecture.png' : card.type === 'journey' ? 'journey.png' : card.type === 'tech' ? 'tech-chain.png' : 'geofence-safety.png'}`} alt={card.caption}/>
-              <span className="visual-frame__caption"><b>{card.caption}</b><em>点击放大查看</em></span>
-            </button>
-            {card.type === 'journey' && <div className="rule-callout"><b>最新业务规则</b><span>持续获取机器人位置 + 用户位置</span><ArrowRightOutlined /><span>计算双方距离</span><ArrowRightOutlined /><strong>≤ 10m 自动汇合成功</strong><ArrowRightOutlined /><span>TTS 行李确认</span></div>}
-          </section>
-        ))}
+      <article className="hh-article">
+        <section className="hh-constraints xd-deliverables" aria-label="上线进展">
+          <p className="hh-label">上线进展 · IN SERVICE</p>
+          <div>{[
+            ['5 月 1 日', '2026 年正式上线'], ['2 台', '杭州东站已投入服务'],
+            ['至少 6 台', '未来计划总规模'], ['媒体报道', '杭州日报等公开报道'],
+          ].map(([title,copy]) => <div key={title}><strong>{title}</strong><p>{copy}</p></div>)}</div>
+          <p className="hh-note xd-progress-note">截至 2026 年 9 月，已上线 2 台；至少 6 台为后续规划，尚未全部投用。</p>
+        </section>
+        <nav className="xd-chapters" aria-label="案例章节">{chapters.map(([id,label]) => <Link key={id} to={`/#${id}`}>{label}</Link>)}</nav>
 
-        <section className="role-section section" id="role">
-          <SectionTitle index="06" eyebrow="MY ROLE" title="我的角色：AI 产品经理" copy="从语音理解到空间执行，从用户流程到后台运营，负责让跨端、跨设备的服务体验成为一个完整产品。" />
-          <div className="role-layout">
-            <div className="role-core"><span>AI PRODUCT<br/>MANAGER</span><b>产品链路设计</b><b>跨团队协同</b><b>异常兜底策略</b></div>
-            <div className="role-list">
-              {[
-                ['01', '语音交互流程', '唤醒 · ASR · 意图识别 · 多轮补全 · TTS · 打断 / 确认 / 兜底'],
-                ['02', '杭小东一键传唤', '入口 · 状态校验 · 权限策略 · 汇合点 · 自动距离汇合 · 行李确认'],
-                ['03', '机器人导航流程', '前往汇合点 · 汇合 · 导航 · 暂停 · 继续 · 提前结束 · 完成'],
-                ['04', '异常兜底策略', '权限不足 · 位置异常 · 网络异常 · 繁忙 · 充电 · 离线 · 故障 · 失败'],
-                ['05', '运营后台', '监控 · 调度 · 素材 · 电子围栏 · 告警日志 · 实时态势'],
-              ].map(([n, title, copy]) => <div className="role-item" key={n}><span>{n}</span><div><b>{title}</b><p>{copy}</p></div></div>)}
-            </div>
+        <Section id="overview" title="让旅客问完路，也有人带着走">
+          <p>在杭州东站，旅客可能一边找上车点，一边拖着行李。小东鸭将问询、带路和行李辅助放在同一次服务中，连接手机上的服务入口与站内的真实机器人。</p>
+          <figure className="xd-photo"><Image src={asset('xiaodongya', 'station-service.jpg')} alt="杭州东站杭小东服务展示区前的小东鸭机器人" width="100%" loading="lazy" preview={{ mask: '查看现场原图' }} /><figcaption>杭州东站现场：杭小东服务入口与小东鸭机器人。</figcaption></figure>
+          <h3>现场直接对话，也能从手机发起传唤</h3>
+          <p>旅客在站内遇见小东鸭时，可以直接开口问路、请求带路；需要机器人过来时，则通过杭小东小程序一键传唤。两种入口分别承接现场即时需求与主动呼叫需求。</p>
+          <div className="hh-table"><table><caption className="hh-sr">参与对象与产品要解决的问题</caption><thead><tr><th scope="col">服务对象</th><th scope="col">产品要解决的问题</th></tr></thead><tbody>
+            <tr><th scope="row">旅客</th><td>从哪里呼叫机器人、在哪里汇合，以及如何开始或结束服务。</td></tr>
+            <tr><th scope="row">机器人</th><td>当前能否接单、下一步去哪里，以及遇到异常时如何反馈。</td></tr>
+            <tr><th scope="row">运营人员</th><td>查看运行状态、调度任务，并处理空间安全和设备告警。</td></tr>
+          </tbody></table></div>
+          <Image.PreviewGroup><div className="hh-screens xd-product-screens">{[
+            ['home.png', '从杭小东进入服务', '旅客通过小程序入口找到机器人服务。'],
+            ['robot-map.png', '查看状态，发起召唤', '地图呈现机器人位置与可用状态，提供召唤入口。'],
+          ].map(([file,title,copy]) => <figure key={file}><div className="hh-screen"><Image src={asset('hangxiaodong',file)} alt={title} width="100%" loading="lazy" preview={{mask:'查看原图'}} /></div><figcaption><h3>{title}</h3><p>{copy}</p></figcaption></figure>)}</div></Image.PreviewGroup>
+          <p className="hh-note">以上为现场照片与真实产品界面；下方流程图为作品集整理。</p>
+        </Section>
+
+        <Section id="architecture" title="从用户入口到机器人执行">
+          <p>用户从杭小东小程序或机器人现场对话发起请求，AI 负责理解与对话，任务中枢完成校验、分配与状态流转，机器人执行移动和服务。运营后台让这条链路可查看、可调度、可干预。</p>
+          <Diagram file="architecture.png" title="小东鸭整体产品架构" />
+        </Section>
+
+        <Section id="journey" title="一键传唤后，如何与旅客汇合">
+          <p>系统按产品规则安排汇合点，并告知旅客前往，无需手动选择。汇合后，机器人确认行李需求，再开始带路服务。</p>
+          <Diagram file="journey-simple-v3.png" title="一键传唤流程与状态流转" />
+        </Section>
+
+        <Section id="technology" title="说出目的地，衔接带路与行李辅助">
+          <p>旅客问“6 号网约车上客区怎么走”，机器人回应带路，并确认是否需要搬运行李。产品把地点问询衔接到下一步服务，同时在屏幕上呈现聆听状态与打断方式。</p>
+          <Image.PreviewGroup><div className="xd-voice-screens">{[
+            ['voice-navigation.png', '中文问路与行李确认', '识别目的地后衔接带路，并确认行李需求。'],
+            ['voice-english.jpg', '英文问询与信息返回', '实拍界面展示上车点距离、排队人数与预计等待时间。'],
+          ].map(([file,title,copy]) => <figure className="xd-photo" key={file}><Image src={asset('xiaodongya',file)} alt={title} width="100%" loading="lazy" preview={{mask:'查看对话原图'}} /><figcaption><h3>{title}</h3><p>{copy}</p></figcaption></figure>)}</div></Image.PreviewGroup>
+          <p className="hh-note">截图展示的是当时小东鸭机器人屏幕的对话内容与状态。</p>
+          <Diagram file="tech-chain-inputs-v3.png" title="AI 与机器人技术链路" />
+        </Section>
+
+        <Section id="safety" title="将空间风险落实为产品规则">
+          <p>通过电子围栏、停留超时告警与全局锁定，让运营人员及时发现空间风险并介入处理。</p>
+          <Diagram file="geofence-safety.png" title="电子围栏与安全机制" />
+        </Section>
+
+        <Section id="role" title="我负责的产品工作">
+          <p>我负责语音交互、一键传唤与导航、异常处理和运营后台的产品设计，并协同研发推进联调与验收。</p>
+          <Diagram file="my-role.png" title="我的工作与职责范围" />
+        </Section>
+
+        <Section id="coverage" title="从正式上线，到被看见的站内服务">
+          <p>从五一前的试运行，到记者实地探访与旅客使用反馈，公开报道记录了小东鸭在杭州东站的落地过程。</p>
+          <div className="xd-press-links">
+            <a href={dailyReport} target="_blank" rel="noreferrer"><span>杭州日报 · 2026.04.30</span><strong>五一前试运行与投用计划 <ArrowRightOutlined /></strong></a>
+            <a href={toutiaoReport} target="_blank" rel="noreferrer"><span>今日头条</span><strong>小东鸭相关报道 <ArrowRightOutlined /></strong></a>
           </div>
-          <button className="visual-frame role-art-frame" onClick={() => setVisual({ id:'role', index:'06', eyebrow:'MY ROLE', title:'我的角色：AI 产品经理', copy:'覆盖跨端流程、状态机、AI 能力落地与运营安全闭环。', type:'role', caption:'「我的工作」职责范围图' })} aria-label="放大查看我的工作职责范围图">
-            <img className="portfolio-art" src={`${import.meta.env.BASE_URL}assets/portfolio/my-role.png`} alt="我的工作职责范围图"/>
-            <span className="visual-frame__caption"><b>「我的工作」职责范围图</b><em>点击放大查看</em></span>
-          </button>
-        </section>
+          <Image.PreviewGroup><div className="xd-press-screens">{[
+            ['press-dushi.png', '都市快报 · 橙柿互动', '2026.07.25 · 旅客使用与记者实地探访'],
+            ['press-chengtou.png', '杭州城投资产集团', '2026.08.25 · 项目落地故事'],
+          ].map(([file,title,copy]) => <figure key={file}><Image src={asset('xiaodongya',file)} alt={`${title}报道截图`} width="100%" loading="lazy" preview={{mask:'查看报道截图'}} /><figcaption><h3>{title}</h3><p>{copy}</p></figcaption></figure>)}</div></Image.PreviewGroup>
+        </Section>
 
-        <section className="demo-cta section">
-          <div><Tag color="blue">INTERACTIVE DEMO</Tag><h2>不止浏览，亲手运行一次机器人服务</h2><p>进入运营后台，创建任务、观察机器人与用户距离缩短，并验证安全事件如何触发与恢复。</p></div>
-          <Button type="primary" size="large" onClick={() => navigate('/demo/dashboard')}>进入互动 Demo <ArrowRightOutlined /></Button>
-        </section>
+        <Section id="reflection" title="我学到的">
+          <div className="hh-cards">{[
+            ['AI 要与位置、设备和任务状态协同', '理解用户只是服务的起点。语言理解、空间定位、设备状态、任务执行和反馈需要共同支撑完整体验。'],
+            ['物理空间里的服务，需要提前设计兜底', '将权限、定位、网络与设备异常纳入流程，明确每种状态下用户能做什么、运营如何介入。'],
+            ['持续运行需要运营系统支撑', '多机器人服务需要监控、调度与安全机制，才能让一线人员掌握运行情况并处理问题。'],
+          ].map(([title,copy]) => <div className="hh-card" key={title}><h3>{title}</h3><p>{copy}</p></div>)}</div>
+        </Section>
 
-        <section className="reflection section" id="reflection">
-          <SectionTitle index="07" eyebrow="REFLECTION" title="真正的智能，发生在完整链路里" />
-          <blockquote>具身智能产品的核心，并不是简单把大模型装进机器人，而是把语言理解、空间定位、设备状态、任务执行和安全机制组织成一条可靠的服务链路。</blockquote>
-          <div className="reflection-grid"><div><span>01</span><b>AI 是链路的一部分</b><p>理解与对话必须与位置、设备和任务状态协同。</p></div><div><span>02</span><b>物理世界需要兜底</b><p>异常不是边缘情况，而是必须提前设计的主流程。</p></div><div><span>03</span><b>规模化依靠运营系统</b><p>多机器人运行离不开监控、调度与安全机制。</p></div></div>
-        </section>
-      </main>
-
-      <footer><Logo inverse/><p>小东鸭｜具身智能服务机器人产品作品集</p><span>Sanitized & reconstructed · Mock data only</span></footer>
-
-      <Drawer title="项目导航" open={menuOpen} onClose={() => setMenuOpen(false)} placement="right">
-        <div className="mobile-nav">{nav.map(([id, label]) => <button key={id} onClick={() => go(id)}>{label}<ArrowRightOutlined /></button>)}</div>
-      </Drawer>
-      <Modal open={!!visual} footer={null} onCancel={() => setVisual(null)} width={1100} centered title={visual?.caption}>
-        {visual && <div className="lightbox-content"><img className="lightbox-image" src={`${import.meta.env.BASE_URL}assets/portfolio/${visual.type === 'architecture' ? 'architecture.png' : visual.type === 'journey' ? 'journey.png' : visual.type === 'tech' ? 'tech-chain.png' : visual.type === 'safety' ? 'geofence-safety.png' : 'my-role.png'}`} alt={visual.caption}/><p>{visual.copy}</p></div>}
-      </Modal>
-    </div>
-  )
+        <section id="experience" tabIndex={-1} className="hh-cta xd-experience"><div><h2>下次到杭州东站，体验小东鸭</h2><p>在站内遇见小东鸭时，可直接说“小东小东”，告诉它你想去哪里；也可以打开杭小东小程序，进入“呼叫机器人”，查看可用状态并发起一键传唤。</p><p>机器人带路与行李辅助需在杭州东站现场体验，以当时的设备状态和服务范围为准。</p></div><Link to="/#journey">查看一键传唤流程 <ArrowRightOutlined /></Link></section>
+        <aside id="demo" className="xd-admin-note"><h3>管理后台演示</h3><p>展示运营人员如何查看设备、调度任务与处理告警，使用演示数据。</p><Link to="/demo/dashboard">查看管理后台演示 <ArrowRightOutlined /></Link></aside>
+        <Link className="hh-inline-link xd-next" to="/hangxiaodong">继续查看杭小东案例 <ArrowRightOutlined /></Link>
+      </article>
+    </main>
+    <footer className="hh-footer">小东鸭 · AI 产品经理作品集</footer>
+  </div>
 }
