@@ -1,0 +1,172 @@
+{
+  "portfolio/architecture.png": {
+    "width": 1448,
+    "height": 1086,
+    "variants": {
+      "480": "optimized/portfolio/architecture-aa01dcc2-480.webp",
+      "960": "optimized/portfolio/architecture-aa01dcc2-960.webp",
+      "1440": "optimized/portfolio/architecture-aa01dcc2-1440.webp",
+      "full": "optimized/portfolio/architecture-aa01dcc2-full.webp"
+    }
+  },
+  "portfolio/journey-simple-v3.png": {
+    "width": 1448,
+    "height": 1086,
+    "variants": {
+      "480": "optimized/portfolio/journey-simple-v3-d3bd70bf-480.webp",
+      "960": "optimized/portfolio/journey-simple-v3-d3bd70bf-960.webp",
+      "1440": "optimized/portfolio/journey-simple-v3-d3bd70bf-1440.webp",
+      "full": "optimized/portfolio/journey-simple-v3-d3bd70bf-full.webp"
+    }
+  },
+  "portfolio/tech-chain-inputs-v3.png": {
+    "width": 1448,
+    "height": 1086,
+    "variants": {
+      "480": "optimized/portfolio/tech-chain-inputs-v3-85c8f4ba-480.webp",
+      "960": "optimized/portfolio/tech-chain-inputs-v3-85c8f4ba-960.webp",
+      "1440": "optimized/portfolio/tech-chain-inputs-v3-85c8f4ba-1440.webp",
+      "full": "optimized/portfolio/tech-chain-inputs-v3-85c8f4ba-full.webp"
+    }
+  },
+  "portfolio/geofence-safety.png": {
+    "width": 1448,
+    "height": 1086,
+    "variants": {
+      "480": "optimized/portfolio/geofence-safety-5c2b3f50-480.webp",
+      "960": "optimized/portfolio/geofence-safety-5c2b3f50-960.webp",
+      "1440": "optimized/portfolio/geofence-safety-5c2b3f50-1440.webp",
+      "full": "optimized/portfolio/geofence-safety-5c2b3f50-full.webp"
+    }
+  },
+  "portfolio/my-role.png": {
+    "width": 1448,
+    "height": 1086,
+    "variants": {
+      "480": "optimized/portfolio/my-role-4be6cc03-480.webp",
+      "960": "optimized/portfolio/my-role-4be6cc03-960.webp",
+      "1440": "optimized/portfolio/my-role-4be6cc03-1440.webp",
+      "full": "optimized/portfolio/my-role-4be6cc03-full.webp"
+    }
+  },
+  "xiaodongya/robot-onsite.png": {
+    "width": 720,
+    "height": 960,
+    "variants": {
+      "480": "optimized/xiaodongya/robot-onsite-163b1b43-480.webp",
+      "960": "optimized/xiaodongya/robot-onsite-163b1b43-960.webp",
+      "1440": "optimized/xiaodongya/robot-onsite-163b1b43-1440.webp",
+      "full": "optimized/xiaodongya/robot-onsite-163b1b43-full.webp"
+    }
+  },
+  "xiaodongya/station-service.jpg": {
+    "width": 954,
+    "height": 716,
+    "variants": {
+      "480": "optimized/xiaodongya/station-service-84156269-480.webp",
+      "960": "optimized/xiaodongya/station-service-84156269-960.webp",
+      "1440": "optimized/xiaodongya/station-service-84156269-1440.webp",
+      "full": "optimized/xiaodongya/station-service-84156269-full.webp"
+    }
+  },
+  "xiaodongya/voice-navigation.png": {
+    "width": 1080,
+    "height": 675,
+    "variants": {
+      "480": "optimized/xiaodongya/voice-navigation-c7a292a1-480.webp",
+      "960": "optimized/xiaodongya/voice-navigation-c7a292a1-960.webp",
+      "1440": "optimized/xiaodongya/voice-navigation-c7a292a1-1440.webp",
+      "full": "optimized/xiaodongya/voice-navigation-c7a292a1-full.webp"
+    }
+  },
+  "xiaodongya/voice-english.jpg": {
+    "width": 789,
+    "height": 512,
+    "variants": {
+      "480": "optimized/xiaodongya/voice-english-fa043ffd-480.webp",
+      "960": "optimized/xiaodongya/voice-english-fa043ffd-960.webp",
+      "1440": "optimized/xiaodongya/voice-english-fa043ffd-1440.webp",
+      "full": "optimized/xiaodongya/voice-english-fa043ffd-full.webp"
+    }
+  },
+  "xiaodongya/press-dushi.png": {
+    "width": 575,
+    "height": 1074,
+    "variants": {
+      "480": "optimized/xiaodongya/press-dushi-15f1c3c4-480.webp",
+      "960": "optimized/xiaodongya/press-dushi-15f1c3c4-960.webp",
+      "1440": "optimized/xiaodongya/press-dushi-15f1c3c4-1440.webp",
+      "full": "optimized/xiaodongya/press-dushi-15f1c3c4-full.webp"
+    }
+  },
+  "xiaodongya/press-chengtou.png": {
+    "width": 1206,
+    "height": 2622,
+    "variants": {
+      "480": "optimized/xiaodongya/press-chengtou-3d40ba5d-480.webp",
+      "960": "optimized/xiaodongya/press-chengtou-3d40ba5d-960.webp",
+      "1440": "optimized/xiaodongya/press-chengtou-3d40ba5d-1440.webp",
+      "full": "optimized/xiaodongya/press-chengtou-3d40ba5d-full.webp"
+    }
+  },
+  "hangxiaodong/home.png": {
+    "width": 1206,
+    "height": 2622,
+    "variants": {
+      "480": "optimized/hangxiaodong/home-794f5239-480.webp",
+      "960": "optimized/hangxiaodong/home-794f5239-960.webp",
+      "1440": "optimized/hangxiaodong/home-794f5239-1440.webp",
+      "full": "optimized/hangxiaodong/home-794f5239-full.webp"
+    }
+  },
+  "hangxiaodong/robot-map.png": {
+    "width": 1206,
+    "height": 2622,
+    "variants": {
+      "480": "optimized/hangxiaodong/robot-map-8257c0d3-480.webp",
+      "960": "optimized/hangxiaodong/robot-map-8257c0d3-960.webp",
+      "1440": "optimized/hangxiaodong/robot-map-8257c0d3-1440.webp",
+      "full": "optimized/hangxiaodong/robot-map-8257c0d3-full.webp"
+    }
+  },
+  "hangxiaodong/city-services.png": {
+    "width": 1206,
+    "height": 2622,
+    "variants": {
+      "480": "optimized/hangxiaodong/city-services-56c19c28-480.webp",
+      "960": "optimized/hangxiaodong/city-services-56c19c28-960.webp",
+      "1440": "optimized/hangxiaodong/city-services-56c19c28-1440.webp",
+      "full": "optimized/hangxiaodong/city-services-56c19c28-full.webp"
+    }
+  },
+  "hangxiaodong/tourism-routes.png": {
+    "width": 1206,
+    "height": 2622,
+    "variants": {
+      "480": "optimized/hangxiaodong/tourism-routes-b0e3630b-480.webp",
+      "960": "optimized/hangxiaodong/tourism-routes-b0e3630b-960.webp",
+      "1440": "optimized/hangxiaodong/tourism-routes-b0e3630b-1440.webp",
+      "full": "optimized/hangxiaodong/tourism-routes-b0e3630b-full.webp"
+    }
+  },
+  "hangxiaodong/ride-pickup.png": {
+    "width": 1206,
+    "height": 2622,
+    "variants": {
+      "480": "optimized/hangxiaodong/ride-pickup-abf5b66c-480.webp",
+      "960": "optimized/hangxiaodong/ride-pickup-abf5b66c-960.webp",
+      "1440": "optimized/hangxiaodong/ride-pickup-abf5b66c-1440.webp",
+      "full": "optimized/hangxiaodong/ride-pickup-abf5b66c-full.webp"
+    }
+  },
+  "hangxiaodong/ride-status.png": {
+    "width": 1206,
+    "height": 2622,
+    "variants": {
+      "480": "optimized/hangxiaodong/ride-status-59cdd017-480.webp",
+      "960": "optimized/hangxiaodong/ride-status-59cdd017-960.webp",
+      "1440": "optimized/hangxiaodong/ride-status-59cdd017-1440.webp",
+      "full": "optimized/hangxiaodong/ride-status-59cdd017-full.webp"
+    }
+  }
+}

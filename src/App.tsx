@@ -1,18 +1,19 @@
+import { lazy, Suspense } from 'react'
 import { Navigate, Route, Routes } from 'react-router-dom'
 import { Portfolio } from './portfolio/Portfolio'
-import { Hangxiaodong } from './portfolio/Hangxiaodong'
 import { HangxiaodongStory } from './portfolio/HangxiaodongStory'
-import { DemoApp } from './demo/DemoApp'
-import { DemoProvider } from './store/DemoStore'
+
+const Hangxiaodong = lazy(() => import('./portfolio/Hangxiaodong').then(module => ({ default: module.Hangxiaodong })))
+const DemoRoute = lazy(() => import('./demo/DemoRoute'))
 
 export default function App() {
   return (
-    <Routes>
+    <Suspense fallback={<p className="portfolio-route-loading" role="status">正在打开页面…</p>}><Routes>
       <Route path="/" element={<Portfolio />} />
       <Route path="/hangxiaodong" element={<HangxiaodongStory />} />
       <Route path="/hangxiaodong/technical" element={<Hangxiaodong />} />
-      <Route path="/demo/*" element={<DemoProvider><DemoApp /></DemoProvider>} />
+      <Route path="/demo/*" element={<DemoRoute />} />
       <Route path="*" element={<Navigate to="/" replace />} />
-    </Routes>
+    </Routes></Suspense>
   )
 }

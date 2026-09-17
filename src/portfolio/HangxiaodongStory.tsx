@@ -1,5 +1,7 @@
 import { useEffect, type ReactNode } from 'react'
 import { Image } from 'antd'
+import { PortfolioImage, thumbnail } from './PortfolioImage'
+import { usePortfolioReveal } from './usePortfolioReveal'
 import { Link, useLocation } from 'react-router-dom'
 import { ArrowLeftOutlined, ArrowRightOutlined, EnvironmentOutlined } from '@ant-design/icons'
 import './hangxiaodong-editorial.css'
@@ -20,6 +22,7 @@ function Cards({ items }: { items: string[][] }) {
 }
 export function HangxiaodongStory() {
   const location = useLocation()
+  usePortfolioReveal()
   useEffect(() => { const old = document.title; document.title = '杭小东｜AI 产品经理作品集'; return () => { document.title = old } }, [])
   useEffect(() => {
     const frame = requestAnimationFrame(() => {
@@ -40,7 +43,7 @@ export function HangxiaodongStory() {
           <div className="hh-cover-grid" />
           <div className="hh-cover-brand"><span><EnvironmentOutlined /></span><b>杭小东</b></div>
           <div className="hh-cover-shade" />
-          <div className="hh-cover-phones"><img src={asset('home.png')} alt="杭小东首页" width="1206" height="2622" fetchPriority="high" /><img src={asset('tourism-routes.png')} alt="杭小忆路线推荐" width="1206" height="2622" /></div>
+          <div className="hh-cover-phones"><img decoding="async" src={thumbnail(asset('home.png'))} alt="杭小东首页" width="1206" height="2622" fetchPriority="high" /><img decoding="async" src={thumbnail(asset('tourism-routes.png'))} alt="杭小忆路线推荐" width="1206" height="2622" /></div>
           <span className="hh-cover-label">AI 服务 · 微信 / 支付宝小程序 · 已上线</span>
         </div>
         <section id="overview" tabIndex={-1} className="hh-identity">
@@ -71,7 +74,7 @@ export function HangxiaodongStory() {
         </Section>
         <Section id="screens" title="让服务出现在用户需要的地方">
           <p className="hh-screen-intro">四张真实界面，分别承接进入、选择与操作。点击可查看完整原图。</p>
-          <Image.PreviewGroup><div className="hh-screens">{screens.map(([file,title,copy]) => <figure key={file}><div className="hh-screen"><Image src={asset(file)} alt={title} width="100%" loading="lazy" preview={{mask:'查看原图'}} /></div><figcaption><h3>{title}</h3><p>{copy}</p></figcaption></figure>)}</div></Image.PreviewGroup>
+          <Image.PreviewGroup><div className="hh-screens">{screens.map(([file,title,copy]) => <figure key={file}><div className="hh-screen"><PortfolioImage variant="480" src={asset(file)} alt={title} width="100%" loading="lazy" preview={{mask:'查看原图'}} /></div><figcaption><h3>{title}</h3><p>{copy}</p></figcaption></figure>)}</div></Image.PreviewGroup>
         </Section>
         <Section id="recommendation" title="赶时间的旅客，需要一次给足信息">
           <p>枢纽里的旅客行色匆忙。问“附近哪里有咖啡店？”时，我们尽量在一次回复中给出可选商户、距离排序和导航入口，减少为了获取这些信息而反复追问。</p>
@@ -114,7 +117,7 @@ export function HangxiaodongStory() {
             <Image.PreviewGroup><div className="hh-ride-screens">{[
               ['ride-pickup.png', '去哪坐网约车？', '返回上车点、排队信息与地图，帮助旅客选择候车位置。'],
               ['ride-status.png', '我的网约车到哪了？', '按车牌查询，返回车辆状态、停车区域与车位信息。'],
-            ].map(([file,title,copy]) => <figure key={file}><div className="hh-screen"><Image src={asset(file)} alt={title} width="100%" loading="lazy" preview={{mask:'查看原图'}} /></div><figcaption><h3>{title}</h3><p>{copy}</p></figcaption></figure>)}</div></Image.PreviewGroup>
+            ].map(([file,title,copy]) => <figure key={file}><div className="hh-screen"><PortfolioImage variant="480" src={asset(file)} alt={title} width="100%" loading="lazy" preview={{mask:'查看原图'}} /></div><figcaption><h3>{title}</h3><p>{copy}</p></figcaption></figure>)}</div></Image.PreviewGroup>
             <dl>
               <div><dt>易错点</dt><dd>只按“网约车”关键词返回统一答案，会把“找上车点”和“查车辆”混在一起。</dd></div>
               <div><dt>规则调整</dt><dd>询问乘车位置，进入上车点查询；询问自己叫的车，进入车辆查询，仅在缺少车牌时补问。</dd></div>
